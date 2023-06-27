@@ -13,7 +13,8 @@ main:
     url: /teaching/    
     
   - title: "Resume/CV"
-    url: /cv/
+    #url: /cv/
+    url: /files/ResumeR.pdf
 
   - title: "Involvements"
     url: /involvements/
