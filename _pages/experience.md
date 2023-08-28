@@ -23,12 +23,12 @@ author_profile: true
   * July 2018 - July 2019, Gurgaon, India
 
 * **Indian Institute of Science (IISc), Bangalore, India**
-  * Internship
+  * Research Internship at [CPDM](https://cpdm.iisc.ac.in/cpdm/) under Dr. [Pradipta biswas](https://cpdm.iisc.ac.in/cpdm/facultyprofile.php?name=14)
   * Collaborated with StaceBeam bat sensor development team
   * May 2018 - June 2018, Bangalore, India
 
 * **Indian Institute of Science (IISc), Bangalore, India**
-  * Internship
+  * Research Internship at [CPDM](https://cpdm.iisc.ac.in/cpdm/) under Dr. [Pradipta biswas](https://cpdm.iisc.ac.in/cpdm/facultyprofile.php?name=14)
   * Collaborated with Faurecia Motor Vehicle dashboard team
   * May 2017 - June 2017, Bangalore, India
 
