@@ -82,9 +82,9 @@ analytics:
 author:
   name             : "Swarnabha Roy"
   avatar           : "Profile_pic2.jpg"
-  bio              : "Doctoral Student in Computer Engineering"
+  bio              : "Doctoral Student in Computer Engineering at Texas A&M University"
   location         : "College Station, Texas, USA"
-  employer         : "Texas A&M University"
+  employer         : #"Texas A&M University"
   pubmed           : #"https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
   googlescholar    : "https://scholar.google.com/citations?user=B9MMJM0AAAAJ"
   email            :  "swarnabha7@tamu.edu"
