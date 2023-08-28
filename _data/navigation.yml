@@ -1,14 +1,14 @@
 # main links links
 main:
-  - title: "Publications"
-    #url: /publications/
-    url: https://scholar.google.com/citations?user=B9MMJM0AAAAJ
-
   - title: "Experience"
     url: /experience/
 
   - title: "Research"
     url: /talks/    
+
+  - title: "Publications"
+    #url: /publications/
+    url: https://scholar.google.com/citations?user=B9MMJM0AAAAJ
 
   - title: "Teaching"
     url: /teaching/    
