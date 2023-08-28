@@ -8,6 +8,10 @@ date: 2020-01-02
 location: "College Station, TX, USA"
 ---
 
+ECEN 403 and 404 are part of an industry-sponsored program which is an introduction to the design process and project engineering as practiced in industry. Student teams apply the design process by developing a project proposed by industry sponsors through test and evaluation.
+
+Website: [tamuecencapstone.net](http://tamuecencapstone.net/)
+
 ECEN 403
 ======
 Application of design process and project engineering as practiced in industry; team approach to the design process; development of a project proposal; documentation of the proposal, implementation and project; development of execution and validation plan; project execution will begin in ECEN 403 and continue through to ECEN 404.
