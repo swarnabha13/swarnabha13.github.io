@@ -21,8 +21,10 @@ In essence, my life is a canvas splashed with various hues of passion. Whether i
 
 Here, I present to you a collection of cherished moments frozen in time, snapshots I've had the privilege to capture:
 
-![Illustration of combining vision and language modalities](/images/6.jpg){: .align-right width="300px"}![Illustration of combining vision and language modalities](/images/5.jpg){: .align-right width="300px"}![Illustration of combining vision and language modalities](/images/4.jpg){: .align-right width="300px"}
+![Illustration of combining vision and language modalities](/images/6.jpg){: .align-right width="300px"}![Illustration of combining vision and language modalities](/images/4.jpg){: .align-right width="300px"}![Illustration of combining vision and language modalities](/images/5.jpg){: .align-right width="300px"}
 
-![Illustration of combining vision and language modalities](/images/3.jpg){: .align-right width="300px"}![Illustration of combining vision and language modalities](/images/2.jpg){: .align-right width="300px"}![Illustration of combining vision and language modalities](/images/1.jpg){: .align-right width="300px"}
+![Illustration of combining vision and language modalities](/images/3.jpg){: .align-right width="300px"}![Illustration of combining vision and language modalities](/images/1.jpg){: .align-right width="300px"}![Illustration of combining vision and language modalities](/images/2.jpg){: .align-right width="300px"}
+
+
 
 These images tell tales of my escapades, my connection with art and nature, and the ever-evolving tapestry of my passions.
