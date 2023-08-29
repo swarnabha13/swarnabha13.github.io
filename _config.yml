@@ -7,7 +7,7 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Swarnabha's Homepage"
+title                    : "Swarnabha's Biography"
 title_separator          : "-"
 name                     : &name "Swarnabha Roy"
 description              : &description "personal description"
