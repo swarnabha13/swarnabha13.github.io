@@ -12,4 +12,8 @@ I am a fourth-year Ph.D. student in the [Department of Electrical and Computer E
 
 Prior to joining Texas A&M, I completed my Bachelors' from the [Indian Institute of Technology (IIT) Kharagpur](https://www.iitkgp.ac.in/), with a major in Electronics and Electrical Communications Engineering (Honors). Throughout my tenure at IIT, I collaborated closely with two esteemed professors. With Professor [Pradip Mandal](http://www.ecdept.iitkgp.ac.in/Eece/facultydetails/ece-pradip), I focused on testing a Cross Coupled Switched Capacitor based DC-DC Boost Converter. Additionally, I worked alongside Professor [Mrigank Sharad](http://www.see.iitkgp.ac.in/team-view/dr-mrigank-sharad/) on designing System-on-Chip (SoC) controllers for miniature low-power robots.
 
- ![Illustration of combining vision and language modalities](/images/IMG_3511.jpeg){:  width="auto"}
+Email: [firstname]7@tamu.edu, [firstname]R@gmail.com
+
+Address: WEB 111 (9), ECE Department, Texas A&M University, Wisenbaker Engineering Building 3128, 188 Bizzell St, College Station, TX 77843 
+
+![Illustration of combining vision and language modalities](/images/IMG_3511.jpeg){:  width="auto"}
