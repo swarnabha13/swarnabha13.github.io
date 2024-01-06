@@ -15,7 +15,8 @@ main:
     
   - title: "Resume/CV"
     #url: /cv/
-    url: /files/ResumeR.pdf
+    #url: /files/ResumeR.pdf
+    url: https://rb.gy/n0azif
 
   - title: "Involvements"
     url: /involvements/
