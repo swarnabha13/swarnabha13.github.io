@@ -16,4 +16,4 @@ Email: [firstname]7@tamu.edu, [firstname]R@gmail.com
 
 Address: WEB 111 (9), ECE Department, Texas A&M University, Wisenbaker Engineering Building 3128, 188 Bizzell St, College Station, TX 77843 
 
-![Illustration of combining vision and language modalities](/images/IMG_3511.jpeg){:  width="auto"}
+![Illustration of combining vision and language modalities](/images/photo-collage.png){:  width="auto"}
