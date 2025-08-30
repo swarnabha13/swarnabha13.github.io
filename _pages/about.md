@@ -20,9 +20,7 @@ Address: WEB 111 (9), ECE Department, Texas A&M University, Wisenbaker Engineeri
 Research Interests
 ======
 - Multi-robot autonomy & resilient, network-aware coordination (UAV/UGV swarms).
-
 - Edge–cloud robotics systems (ROS 1/2, Docker, Kubernetes/K3s) for scalable, reliable deployment.
-
 - Learning for perception & decision-making: RGB-D/3D vision, RL/MARL, sim-to-real & digital twins.
 
 <!--
