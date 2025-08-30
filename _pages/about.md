@@ -16,4 +16,16 @@ Email: [firstname]7@tamu.edu, [firstname]R@gmail.com
 
 Address: WEB 111 (9), ECE Department, Texas A&M University, Wisenbaker Engineering Building 3128, 188 Bizzell St, College Station, TX 77843 
 
+Research Interests
+======
+- Multi-robot autonomy & resilient, network-aware coordination (UAV/UGV swarms).
+
+- Edge–cloud robotics systems (ROS 1/2, Docker, Kubernetes/K3s) for scalable, reliable deployment.
+
+- Learning for perception & decision-making: RGB-D/3D vision, RL/MARL, sim-to-real & digital twins.
+
+<span style="color: red;">Actively seeking full-time opportunities in Robotics/Autonomy (Robotics Software, Perception, Planning, and Systems). Open to relocation. Feel free to reach out if you think I am a good fit!</span>
+
+<!--
 ![Illustration of combining vision and language modalities](/images/photo-collage.png){:  width="auto"}
+-->
