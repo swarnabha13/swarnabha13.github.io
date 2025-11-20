@@ -10,6 +10,7 @@ author_profile: true
 * **IoT Security and Cloud Computing:**
     * Security protocols and computation management in multi-robot systems.
     * Cloud-based frameworks for IoT-enabled rescue operations.
+    ![Illustration of Cloud computing](/images/sensors-22-05569-g002.png){:  width="100px"}
 
 * **Distributed Computation and Load Balancing:**
     * Developing dynamic load balancing strategies for modular edge robotics.
