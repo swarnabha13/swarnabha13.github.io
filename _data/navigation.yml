@@ -4,7 +4,8 @@ main:
     url: /experience/
 
   - title: "Research"
-    url: /research/    
+    #url: /research/  
+    url: /publications/  
 
   - title: "Publications"
     #url: /publications/
