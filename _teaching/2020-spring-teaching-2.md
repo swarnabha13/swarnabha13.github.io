@@ -10,7 +10,12 @@ location: "College Station, TX, USA"
 
 ECEN 403 and 404 are part of an industry-sponsored program which is an introduction to the design process and project engineering as practiced in industry. Student teams apply the design process by developing a project proposed by industry sponsors through test and evaluation.
 
-Website: [tamuecencapstone.net](http://tamuecencapstone.net/)
+* Mentored 15+ capstone teams comprising 60 students per semester across embedded, ML, and robotics projects;
+led design reviews and milestone planning.
+* Created debugging playbooks and hands-on labs for ROS, microcontrollers, and CI; unblocked teams on
+software–hardware integration issues.
+* Designed and maintained the course site (Python/HTML/CSS/JS) and automated student–project mapping
+aligned to each project description based on resume.
 
 ECEN 403
 ======

@@ -7,11 +7,11 @@ author_profile: true
 
 {% include base_path %}
 
-* **Vice-President of Events and IT, Indian Graduate Student Association (IGSA) at TAMU, 2023-Present**
-    * Led a team of 9 officers towards hosting the most incredible and noteworthy celebrations at TAMU including Diwali, Holi, Ganesh Chaturthi, etc.
-
 * **President of the Indian Graduate Student Association (IGSA) at TAMU, 2022-23**
     * Led a team of 60 officers to serve Indian graduate students and their families at Texas A&M University.
+
+* **Vice-President of Events and IT, Indian Graduate Student Association (IGSA) at TAMU, 2023-2024**
+    * Led a team of 9 officers towards hosting the most incredible and noteworthy celebrations at TAMU including Diwali, Holi, Ganesh Chaturthi, etc.
 
 * **Vice President of Desi Aggies at TAMU, 2019-2021**
     * Helped in organizing the Time4Chai biweekly on Fridays which is attended by 300+ people where people can network, relax and play board games over chai.
