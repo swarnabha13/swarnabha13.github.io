@@ -7,5 +7,5 @@ authors: <ins>Swarnabha Roy</ins>, Reece Dobson, Jack Campbell, Stavros Kalafati
 date: 2024-10-23
 venue: '2024 7th Conference on Cloud and Internet of Things (CIoT)'
 paperurl: 'https://ieeexplore.ieee.org/document/10756086'
-image: ''
+image: '/images/TAPS.gif'
 ---

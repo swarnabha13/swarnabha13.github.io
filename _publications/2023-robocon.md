@@ -7,5 +7,5 @@ authors: <ins>Swarnabha Roy</ins>, Stavros Kalafatis
 date: 2023-11-23
 venue: '2023 5th International Conference on Control and Robotics (ICCR)'
 paperurl: 'https://ieeexplore.ieee.org/document/10444794'
-image: ''
+image: '/images/robocon.gif'
 ---
