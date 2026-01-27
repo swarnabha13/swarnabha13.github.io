@@ -7,5 +7,5 @@ authors: <ins>Swarnabha Roy</ins>, Amee Parmar, Rishik Aggarwal, Stavros Kalafat
 date: 2025-05-28
 venue: 'SPIE Autonomous Air and Ground Sensing Systems for Agricultural Optimization and Phenotyping X'
 paperurl: 'https://doi.org/10.1117/12.3053521'
-image: ''
+image: '/images/harvest.jpg'
 ---

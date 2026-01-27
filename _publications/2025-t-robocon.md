@@ -7,5 +7,5 @@ authors: <ins>Swarnabha Roy</ins>, Reece Dobson, Jack Campbell, Stavros Kalafati
 date: 2025-06-01
 venue: '2025 International Symposium on Networks, Computers and Communications (ISNCC)'
 paperurl: 'https://www.researchgate.net/publication/397866664'
-image: ''
+image: '/images/t-robo.png'
 ---
