@@ -27,6 +27,10 @@
   }
 }
 
+.archive__item {
+  @include clearfix();
+}
+
 .archive__subtitle {
   margin: 1.414em 0 0;
   padding-bottom: 0.5em;
@@ -71,6 +75,21 @@
   overflow: hidden;
   img {
     width: 100%;
+  }
+}
+
+.archive__item-thumb {
+  float: left;
+  width: 140px;
+  max-width: 40%;
+  margin: 0 1rem 0.5rem 0;
+  border-radius: $border-radius;
+  overflow: hidden;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 }
 

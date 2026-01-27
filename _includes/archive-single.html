@@ -14,6 +14,21 @@
 
 <div class="{{ include.type | default: "list" }}__item">
   <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    {% if include.type != "grid" and post.collection == 'publications' and post.image %}
+      <div class="archive__item-thumb">
+        <img
+          src=
+          {% if post.image contains "://" %}
+            "{{ post.image }}"
+          {% elsif post.image contains "/images/" %}
+            "{{ post.image | prepend: base_path }}"
+          {% else %}
+            "{{ post.image | prepend: "/images/" | prepend: base_path }}"
+          {% endif %}
+          alt="{{ title }} thumbnail">
+      </div>
+    {% endif %}
+
     {% if include.type == "grid" and teaser %}
       <div class="archive__item-teaser">
         <img src=
