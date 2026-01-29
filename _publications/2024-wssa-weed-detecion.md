@@ -6,7 +6,7 @@ excerpt: "A modular UAV system leveraging machine vision and AI for real-time we
 authors: <ins>Swarnabha Roy</ins>, Ubaldo Torres, Bholuram Gurjar, Navjot Singh, Aashay Kadakia, Bishwa B Sapkota, Martin Wnorowski, Stavros Kalafatis, Muthukumar V Bagavathiannan
 date: 2024-01-22
 venue: 'Weed Science Society of America (WSSA) 2024 Annual Meeting'
-pageurl: 'https://wssa.net/meeting/2024-meeting-proceedings/'
+paperurl: 'https://wssa.net/meeting/2024-meeting-proceedings/'
 posterurl: '/files/Swarnabha_WSSA_new.pdf'
 image: '/images/wssa.jpg'
 ---
