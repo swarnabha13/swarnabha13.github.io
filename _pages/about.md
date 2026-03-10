@@ -7,7 +7,7 @@ redirect_from:
   - /about/
   - /about.html
 ---
-<span style="color: red;">I am actively seeking full-time opportunities in Robotics/Autonomy (Robotics Software, Perception, Planning, and Systems). I am open to relocation. Feel free to reach out if you think I am a good fit!</span>
+<span style="color: red;">I am actively seeking internships and full-time opportunities in Robotics/Autonomy (Robotics Software, Perception, Planning, and Systems). I am open to relocation. Feel free to reach out if you think I am a good fit!</span>
 
 I am a Ph.D. Candidate in the <a href="https://engineering.tamu.edu/electrical/index.html" target="_blank">Department of Electrical and Computer Engineering</a> at [Texas A&M University](https://www.tamu.edu/index.html), advised by Prof. [Stavros Kalafatis](https://engineering.tamu.edu/electrical/profiles/kalafatis-stavros.html) in the [PXAR Lab](https://pxar.engr.tamu.edu/people/). My research focuses on robust architectures for modular multi-robot systems operating over challenging networks combining perception, planning, and edge-cloud orchestration (ROS, Docker, Kubernetes/K3s) with learning-based control.
 
