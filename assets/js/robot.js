@@ -13,7 +13,8 @@
   let score=0,position={x:50,y:50},destination={...position};
   let gameFrame=null,gameTime=0,travelFrame=null;
   let actionTimer=null,speechTimer=null,idleTimer=null,blinkTimer=null,blinkEndTimer=null;
-  let idleIndex=0,lastIdleSchedule=-1000,lastGaze=-1000,lastScrollReaction=-1000;
+  let idleIndex=0,lastIdleSchedule=-1000,lastGaze=-1000,lastScrollReaction=-Infinity;
+  let scrollFrame=null,scrollDistance=0,scrollDirection=1,scrollMoment=0;
   let lastScroll=window.scrollY||0,endWaveDone=false,paused=false;
   root.hidden=false;
 
@@ -44,6 +45,10 @@
     if(focus)launcher.focus({preventScroll:true});
   }
   function home({closeControls=false,resetPose=true}={}) {
+    if(resetPose){
+      if(scrollFrame!==null)cancelAnimationFrame(scrollFrame);
+      scrollFrame=null;scrollDistance=0;lastScroll=window.scrollY||0;
+    }
     if(travelFrame!==null)cancelAnimationFrame(travelFrame);
     travelFrame=null;
     // No transition: restore the dock in the same event that resumes page interaction.
@@ -114,7 +119,9 @@
   }
   function pageActivity(event) {
     if(root.contains(event.target))return;
-    home({closeControls:true});
+    // Dock immediately, but let an anchored gesture finish. Wheel/touch events
+    // must not alternate the pose between idle and scrolling on every tick.
+    home({closeControls:true,resetPose:false});
     root.classList.remove('is-speaking');
     scheduleIdle();
   }
@@ -127,14 +134,35 @@
     root.style.setProperty('--gaze-x',(x*2).toFixed(2)+'px');
   }
   function onScroll() {
-    const current=window.scrollY||0,down=current>=lastScroll;lastScroll=current;
+    // Dock synchronously; batch visual reactions to one update per frame.
     home({closeControls:true,resetPose:false});scheduleIdle();
-    if(paused)return;
-    const now=performance.now();if(now-lastScrollReaction<140)return;lastScrollReaction=now;
+    if(paused||scrollFrame!==null)return;
+    scrollFrame=requestAnimationFrame(reactToScroll);
+  }
+  function reactToScroll() {
+    scrollFrame=null;
+    const current=Math.max(0,window.scrollY||0),delta=current-lastScroll;lastScroll=current;
+    if(paused||Math.abs(delta)<.5)return;
+    // Accumulate a deliberate direction change, ignoring trackpad bounce.
+    if(Math.sign(delta)!==Math.sign(scrollDistance))scrollDistance=0;
+    scrollDistance+=delta;
+    if(Math.abs(scrollDistance)>=40)scrollDirection=Math.sign(scrollDistance);
+    const now=performance.now();
+    // Hold each emotion long enough to read it and finish the gesture.
+    if(now-lastScrollReaction<2800||Math.abs(scrollDistance)<8)return;
+    lastScrollReaction=now;scrollDistance=0;
     const total=document.documentElement.scrollHeight-window.innerHeight;
-    if(total>0&&current/total>.97&&!endWaveDone){endWaveDone=true;gesture('wave','happy','You made it to the end!');return;}
-    if(root.dataset.action==='wave'&&endWaveDone)return;
-    gesture(down?'scroll-down':'scroll-up',down?'focused':'curious',null,false,750);
+    const moments=scrollDirection>0
+      ? [['scroll-look','focused'],['scroll-delight','happy'],['scroll-wonder','surprised'],['scroll-wave','happy']]
+      : [['scroll-peek','curious'],['scroll-wonder','surprised'],['scroll-wave','happy'],['scroll-delight','happy']];
+    let moment=moments[scrollMoment++%moments.length];
+    if(total>0&&current/total>.97&&!endWaveDone){
+      endWaveDone=true;moment=['scroll-wave','happy'];speak('You made it to the end!');
+    }
+    // Change targets directly: CSS interpolates from the current pose, without
+    // an idle reset, forced layout, or restarting animation on each scroll tick.
+    pose(reduced.matches?'idle':moment[0],moment[1]);
+    actionTimer=setTimeout(()=>pose(),3400);
   }
 
   function drawGame() {

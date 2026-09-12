@@ -16,22 +16,24 @@
 .robot-companion.is-roaming .robot-launcher { pointer-events: none; }
 .robot-companion.is-roaming .robot-nameplate,
 .robot-companion.is-roaming .robot-bubble { visibility: hidden; }
-.r0-character { transform-origin: 110px 231px; animation: r0-breathe 4s ease-in-out infinite; }
-.r0-head { transform-origin: 111px 135px; transform: translate(var(--gaze-x,0px),var(--gaze-y,0px)) rotate(var(--head-tilt,0deg)); transition: transform .25s ease-out; }
+.r0-character { transform-origin: 110px 231px; transform: rotate(0deg); transition: transform .7s cubic-bezier(.22,.68,.25,1); animation: r0-breathe 4s ease-in-out infinite; }
+.r0-head { transform-origin: 111px 135px; transform: translate(var(--gaze-x,0px),var(--gaze-y,0px)) rotate(var(--head-tilt,0deg)); transition: transform .65s cubic-bezier(.22,.68,.25,1); }
 .r0-eyes { transform-origin: 106px 82px; transform: translate(var(--eye-x,0px),var(--eye-y,0px)); }
 .robot-companion.is-blinking .r0-eyes { transform: translate(var(--eye-x,0px),var(--eye-y,0px)) scaleY(.08); }
 .r0-arm-l { transform-origin: 76px 157px; }
 .r0-arm-r { transform-origin: 148px 157px; }
 .r0-leg-l { transform-origin: 93px 208px; }
 .r0-leg-r { transform-origin: 131px 208px; }
-.r0-expression, .r0-sleep-marks { display: none; }
+.r0-arm-l, .r0-arm-r, .r0-leg-l, .r0-leg-r { transform: rotate(0deg); transition: transform .75s cubic-bezier(.22,.68,.25,1); }
+.r0-expression { opacity: 0; transition: opacity .22s ease; }
+.r0-sleep-marks { opacity: 0; transition: opacity .3s ease; }
 [data-expression="neutral"] .r0-expression-neutral,
 [data-expression="happy"] .r0-expression-happy,
 [data-expression="curious"] .r0-expression-curious,
 [data-expression="surprised"] .r0-expression-surprised,
 [data-expression="sleepy"] .r0-expression-sleepy,
 [data-expression="focused"] .r0-expression-focused,
-[data-expression="sleepy"] .r0-sleep-marks { display: inline; }
+[data-expression="sleepy"] .r0-sleep-marks { opacity: 1; }
 [data-action="wave"] .r0-arm-r { animation: r0-wave 2.3s ease-in-out both; }
 [data-action="wave"] .r0-head { --head-tilt: -5deg; }
 [data-action="dance"] .r0-character { animation: r0-dance .55s ease-in-out 6; }
@@ -42,17 +44,29 @@
 [data-action="stretch"] .r0-arm-l { animation: r0-stretch-l 2.4s ease-in-out; }
 [data-action="stretch"] .r0-arm-r { animation: r0-stretch-r 2.4s ease-in-out; }
 [data-action="sleep"] .r0-head { --head-tilt: 9deg; --gaze-y: 4px; }
-[data-action="scroll-down"] .r0-character { transform: rotate(-6deg) translateY(-2px); animation: none; }
-[data-action="scroll-down"] .r0-head { --head-tilt: 7deg; --gaze-y: 3px; }
-[data-action="scroll-up"] .r0-character { transform: rotate(6deg); animation: none; }
-[data-action="scroll-up"] .r0-head { --head-tilt: -7deg; --gaze-y: -3px; }
+[data-action="scroll-look"] .r0-character { transform: rotate(-3deg); }
+[data-action="scroll-look"] .r0-head { --head-tilt: 6deg; --gaze-y: 3px; }
+[data-action="scroll-look"] .r0-arm-l { transform: rotate(18deg); }
+[data-action="scroll-peek"] .r0-character { transform: rotate(3deg); }
+[data-action="scroll-peek"] .r0-head { --head-tilt: -9deg; --gaze-y: -3px; }
+[data-action="scroll-peek"] .r0-arm-r { transform: rotate(-30deg); }
+[data-action="scroll-delight"] .r0-head { --head-tilt: -5deg; }
+[data-action="scroll-delight"] .r0-arm-l { transform: rotate(45deg); }
+[data-action="scroll-delight"] .r0-arm-r { transform: rotate(-55deg); }
+[data-action="scroll-wonder"] .r0-character { transform: rotate(-2deg); }
+[data-action="scroll-wonder"] .r0-head { --head-tilt: 10deg; --gaze-y: -2px; }
+[data-action="scroll-wonder"] .r0-arm-r { transform: rotate(-105deg); }
+[data-action="scroll-wave"] .r0-head { --head-tilt: -5deg; }
+[data-action="scroll-wave"] .r0-arm-r { transform: rotate(-95deg); animation: r0-scroll-wave 2.6s ease-in-out both; }
 [data-action="explore"] .r0-character { animation: r0-fly .55s ease-in-out infinite alternate; }
 [data-action="explore"] .r0-arm-l { transform: rotate(55deg); }
 [data-action="explore"] .r0-arm-r { transform: rotate(-55deg); }
 [data-action="explore"] .r0-shadow { opacity: 0; }
 [data-action="explore"] .r0-leg-l { transform: rotate(12deg); }
 [data-action="explore"] .r0-leg-r { transform: rotate(-12deg); }
-@keyframes r0-breathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+/* Breathing uses a separate property, so changing a pose never restarts it. */
+@keyframes r0-breathe { 0%,100% { translate: 0 0; } 50% { translate: 0 -2px; } }
+@keyframes r0-scroll-wave { 0%,30%,60%,100% { rotate: 0deg; } 45%,75% { rotate: -15deg; } }
 @keyframes r0-wave { 0%,100% { transform: rotate(0); } 20%,48%,76% { transform: rotate(-95deg); } 34%,62%,86% { transform: rotate(-120deg); } }
 @keyframes r0-dance { 0%,100% { transform: rotate(-7deg); } 50% { transform: translateY(-7px) rotate(7deg); } }
 @keyframes r0-groove-left { 0%,100% { transform: rotate(45deg); } 50% { transform: rotate(-10deg); } }
