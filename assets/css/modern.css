@@ -295,6 +295,15 @@ html[data-theme="dark"] {
 .contact-section, .hero-portrait figcaption { color: var(--ink); }
 .contact-section h2, .contact-aside a { color: var(--ink); }
 .contact-section .eyebrow, .contact-aside > span, .portrait-mark { color: var(--accent); }
+.hero-portrait figcaption {
+  --glass-background: #202a40;
+  --glass-sheen: linear-gradient(145deg, #ffffff0f, #ffffff00 65%);
+  --glass-border: #7e8eaf66;
+  --glass-highlight: #ffffff20;
+  --glass-shadow: #11182726;
+  color: #f5f7ff;
+}
+.hero-portrait figcaption .portrait-mark { color: #c9c2ff; }
 .contact-aside { border-color: var(--glass-border); }
 /* A readable contact panel in both themes, including the mobile dropdown. */
 .sidebar .author__name { color: var(--ink); }
