@@ -1,310 +1,186 @@
-/* Incompressible 2D fluid: velocity advection, vorticity, pressure, and dye.
-   Rendered behind the page. No cursor replacement or magnetic hover effects. */
+/* A decorative 4D nearest-neighbor graph projected into 3D, then onto the page.
+   Cursor motion changes the viewpoint and explores local paths through the graph. */
 (() => {
   'use strict';
-  const vertex = `#version 300 es
-    precision highp float;
-    out vec2 uv;
-    void main() {
-      vec2 p = vec2((gl_VertexID << 1) & 2, gl_VertexID & 2);
-      uv = p;
-      gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0);
-    }`;
-  const shaders = {
-    splat: `#version 300 es
-      precision highp float;
-      in vec2 uv; out vec4 result;
-      uniform sampler2D source;
-      uniform vec2 point;
-      uniform vec3 color;
-      uniform float aspect, radius;
-      void main() {
-        vec2 p = uv - point; p.x *= aspect;
-        vec3 ink = exp(-dot(p,p) / radius) * color;
-        result = vec4(texture(source, uv).xyz + ink, 1.0);
-      }`,
-    advect: `#version 300 es
-      precision highp float;
-      in vec2 uv; out vec4 result;
-      uniform sampler2D velocity, source;
-      uniform vec2 texel;
-      uniform float dt, decay;
-      void main() {
-        vec2 coord = uv - dt * texture(velocity, uv).xy * texel;
-        result = texture(source, coord) / (1.0 + decay * dt);
-      }`,
-    curl: `#version 300 es
-      precision highp float;
-      in vec2 uv; out vec4 result;
-      uniform sampler2D velocity;
-      uniform vec2 texel;
-      void main() {
-        float L = texture(velocity, uv - vec2(texel.x,0)).y;
-        float R = texture(velocity, uv + vec2(texel.x,0)).y;
-        float B = texture(velocity, uv - vec2(0,texel.y)).x;
-        float T = texture(velocity, uv + vec2(0,texel.y)).x;
-        result = vec4(0.5 * (R-L-T+B),0,0,1);
-      }`,
-    vorticity: `#version 300 es
-      precision highp float;
-      in vec2 uv; out vec4 result;
-      uniform sampler2D velocity, curls;
-      uniform vec2 texel;
-      uniform float dt;
-      void main() {
-        float L = texture(curls, uv-vec2(texel.x,0)).x;
-        float R = texture(curls, uv+vec2(texel.x,0)).x;
-        float B = texture(curls, uv-vec2(0,texel.y)).x;
-        float T = texture(curls, uv+vec2(0,texel.y)).x;
-        float C = texture(curls, uv).x;
-        vec2 force = 0.5 * vec2(abs(T)-abs(B),abs(R)-abs(L));
-        force /= length(force)+0.0001;
-        force *= 5.0*C; force.y *= -1.0;
-        vec2 v = texture(velocity,uv).xy + force*dt;
-        result = vec4(clamp(v,vec2(-700),vec2(700)),0,1);
-      }`,
-    divergence: `#version 300 es
-      precision highp float;
-      in vec2 uv; out vec4 result;
-      uniform sampler2D velocity;
-      uniform vec2 texel;
-      void main() {
-        vec2 C = texture(velocity,uv).xy;
-        float L = texture(velocity,uv-vec2(texel.x,0)).x;
-        float R = texture(velocity,uv+vec2(texel.x,0)).x;
-        float B = texture(velocity,uv-vec2(0,texel.y)).y;
-        float T = texture(velocity,uv+vec2(0,texel.y)).y;
-        if (uv.x<texel.x) L=-C.x;
-        if (uv.x>1.0-texel.x) R=-C.x;
-        if (uv.y<texel.y) B=-C.y;
-        if (uv.y>1.0-texel.y) T=-C.y;
-        result=vec4(0.5*(R-L+T-B),0,0,1);
-      }`,
-    fade: `#version 300 es
-      precision highp float;
-      in vec2 uv; out vec4 result;
-      uniform sampler2D source;
-      void main() { result=texture(source,uv)*0.8; }`,
-    pressure: `#version 300 es
-      precision highp float;
-      in vec2 uv; out vec4 result;
-      uniform sampler2D pressure, divergence;
-      uniform vec2 texel;
-      void main() {
-        float L=texture(pressure,uv-vec2(texel.x,0)).x;
-        float R=texture(pressure,uv+vec2(texel.x,0)).x;
-        float B=texture(pressure,uv-vec2(0,texel.y)).x;
-        float T=texture(pressure,uv+vec2(0,texel.y)).x;
-        float d=texture(divergence,uv).x;
-        result=vec4((L+R+B+T-d)*0.25,0,0,1);
-      }`,
-    project: `#version 300 es
-      precision highp float;
-      in vec2 uv; out vec4 result;
-      uniform sampler2D velocity, pressure;
-      uniform vec2 texel;
-      void main() {
-        float L=texture(pressure,uv-vec2(texel.x,0)).x;
-        float R=texture(pressure,uv+vec2(texel.x,0)).x;
-        float B=texture(pressure,uv-vec2(0,texel.y)).x;
-        float T=texture(pressure,uv+vec2(0,texel.y)).x;
-        result=vec4(texture(velocity,uv).xy-vec2(R-L,T-B),0,1);
-      }`,
-    display: `#version 300 es
-      precision highp float;
-      in vec2 uv; out vec4 result;
-      uniform sampler2D dye;
-      uniform vec2 texel;
-      uniform float dark, fadeOut;
-      void main() {
-        vec2 blur=texel*3.0;
-        vec3 c=texture(dye,uv).rgb*0.4;
-        c+=texture(dye,uv+vec2(blur.x,0)).rgb*0.15;
-        c+=texture(dye,uv-vec2(blur.x,0)).rgb*0.15;
-        c+=texture(dye,uv+vec2(0,blur.y)).rgb*0.15;
-        c+=texture(dye,uv-vec2(0,blur.y)).rgb*0.15;
-        c=max(c,vec3(0));
-        float energy=max(c.r,max(c.g,c.b));
-        float L=length(texture(dye,uv-vec2(texel.x,0)).rgb);
-        float R=length(texture(dye,uv+vec2(texel.x,0)).rgb);
-        float B=length(texture(dye,uv-vec2(0,texel.y)).rgb);
-        float T=length(texture(dye,uv+vec2(0,texel.y)).rgb);
-        vec3 normal=normalize(vec3((R-L)*2.0,(T-B)*2.0,0.7));
-        float sheen=pow(max(dot(normal,normalize(vec3(-0.4,0.5,1.0))),0.0),12.0);
-        vec3 hue=1.0-exp(-c*1.4);
-        vec3 color=mix(c/max(energy,0.001)*0.7,hue+vec3(sheen*0.035),dark);
-        float alpha=(1.0-exp(-energy*1.1))*mix(0.30,0.94,dark)*fadeOut;
-        result=vec4(clamp(color,0.0,1.0),alpha);
-      }`
-  };
-  const canvas = document.querySelector('.cursor-paint');
+  const canvas = document.querySelector('.model-space');
   if (!canvas) return;
-  const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let gl, programs = {}, targets = [], fields, vao;
-  let frame = null, lastFrame = 0, lastInput = 0, previous = null, pending = null;
-  let enabled = false, lost = false, seeded = false;
+  let ctx;
+  try { ctx = canvas.getContext('2d', { alpha: true }); } catch (_) { return; }
+  if (!ctx) return;
   const root = document.documentElement;
-
-  function compile(type, source) {
-    const shader = gl.createShader(type);
-    gl.shaderSource(shader, source); gl.compileShader(shader);
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      const message = gl.getShaderInfoLog(shader); gl.deleteShader(shader); throw new Error(message);
-    }
-    return shader;
-  }
-  function initialize() {
-    gl = canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: false, antialias: false, depth: false, powerPreference: 'low-power' });
-    if (!gl || !gl.getExtension('EXT_color_buffer_float')) return false;
-    const vert = compile(gl.VERTEX_SHADER, vertex);
-    Object.entries(shaders).forEach(([name, source]) => {
-      const frag = compile(gl.FRAGMENT_SHADER, source);
-      const program = gl.createProgram();
-      gl.attachShader(program, vert); gl.attachShader(program, frag); gl.linkProgram(program);
-      gl.deleteShader(frag);
-      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
-      const uniforms = {};
-      const count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-      for (let i = 0; i < count; i++) {
-        const info = gl.getActiveUniform(program, i);
-        uniforms[info.name] = gl.getUniformLocation(program, info.name);
-      }
-      programs[name] = { program, uniforms };
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+  let width = 1, height = 1, frame = null, lastFrame = 0, lastInput = -10000;
+  let hovering = false, selected = -1, lastSelection = -10000;
+  let signals = [], projected = [], dark = root.dataset.theme === 'dark';
+  const pointer = { x: 0, y: 0 };
+  const camera = { x: 0, y: 0 }, desired = { x: 0, y: 0 };
+  let seed = 731;
+  function random() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
+  const count = 156;
+  const nodes = Array.from({ length: count }, (_, index) => {
+    // Stratified layers and a small fourth coordinate give the graph coherent depth.
+    const layer = index % 6;
+    return { x: (random() - .5) * 2.8, y: (random() - .5) * 1.9, z: (layer / 5 - .5) * 1.8 + (random() - .5) * .2, w: (random() - .5) * 1.4, layer };
+  });
+  const neighbors = Array.from({ length: count }, () => []);
+  const edges = [];
+  const edgeKeys = new Set();
+  nodes.forEach((node, i) => {
+    const nearest = nodes.map((other, j) => ({ j, distance: (node.x-other.x)**2 + (node.y-other.y)**2 + (node.z-other.z)**2 + (node.w-other.w)**2 * .45 }))
+      .filter(other => other.j !== i).sort((a,b) => a.distance-b.distance).slice(0,3);
+    nearest.forEach(({j}) => {
+      const key = Math.min(i,j) + ':' + Math.max(i,j);
+      if (edgeKeys.has(key)) return;
+      edgeKeys.add(key); edges.push([i,j]); neighbors[i].push(j); neighbors[j].push(i);
     });
-    gl.deleteShader(vert);
-    vao = gl.createVertexArray(); gl.bindVertexArray(vao);
-    gl.disable(gl.BLEND); gl.clearColor(0,0,0,0);
-    return true;
+  });
+  function project() {
+    const yaw = camera.x * .30, pitch = camera.y * .22, fourth = camera.x * .24 - camera.y * .16;
+    const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch), cw = Math.cos(fourth), sw = Math.sin(fourth);
+    projected = nodes.map(node => {
+      const x4 = node.x*cw-node.w*sw, w4 = node.x*sw+node.w*cw;
+      const perspective4 = 2.8/(2.8-w4);
+      const x = x4*perspective4, y = node.y*perspective4, z = node.z*perspective4;
+      const rx = x*cy+z*sy, rz = z*cy-x*sy;
+      const ry = y*cp-rz*sp, depth = y*sp+rz*cp;
+      const perspective3 = 3.7/(3.7+depth);
+      return { x: width*.5+rx*width*.34*perspective3-camera.x*width*.025,
+        y: height*.5+ry*height*.43*perspective3-camera.y*height*.025,
+        depth, scale: perspective3, focus: 0 };
+    });
   }
-  function release() {
-    targets.forEach(target => { gl.deleteTexture(target.texture); gl.deleteFramebuffer(target.fbo); });
-    targets = []; fields = null;
+  function rgba(color, alpha) { return 'rgba(' + color.join(',') + ',' + Math.max(0,Math.min(1,alpha)) + ')'; }
+  function line(a,b,color,alpha,lineWidth=1) {
+    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+    ctx.strokeStyle=rgba(color,alpha); ctx.lineWidth=lineWidth; ctx.stroke();
   }
-  function target(width, height, linear) {
-    const texture = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, linear ? gl.LINEAR : gl.NEAREST);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, linear ? gl.LINEAR : gl.NEAREST);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA16F,width,height,0,gl.RGBA,gl.HALF_FLOAT,null);
-    const fbo = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER,fbo);
-    gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,texture,0);
-    const result = { texture, fbo, width, height }; targets.push(result);
-    if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) throw new Error('Fluid framebuffer unavailable');
-    gl.viewport(0,0,width,height); gl.clear(gl.COLOR_BUFFER_BIT);
-    return result;
+  function dot(x,y,r,color,alpha) {
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fillStyle=rgba(color,alpha); ctx.fill();
   }
-  function pair(width, height, linear) {
-    return { read: target(width,height,linear), write: target(width,height,linear), swap() { [this.read,this.write]=[this.write,this.read]; } };
+  function explore(index, time) {
+    selected=index; lastSelection=time;
+    const visited=new Set([index]);
+    let frontier=[index]; const paths=[];
+    for (let hop=0;hop<3;hop++) {
+      const next=[];
+      frontier.forEach(from => neighbors[from].slice(0,3).forEach(to => {
+        if (visited.has(to) || paths.length>=18) return;
+        visited.add(to); next.push(to); paths.push({from,to,start:time+hop*230});
+      }));
+      frontier=next;
+    }
+    signals=paths;
   }
-  function dimensions(base) {
-    const aspect = canvas.width/canvas.height;
-    return aspect >= 1 ? [Math.round(base*aspect),base] : [base,Math.round(base/aspect)];
+  function render(time) {
+    dark=root.dataset.theme==='dark';
+    ctx.clearRect(0,0,width,height);
+    project();
+    const base=dark ? [129,150,194] : [87,105,153];
+    const active=dark ? [107,220,237] : [68,76,197];
+    const secondary=dark ? [173,151,245] : [124,85,192];
+    const interactive=fine.matches && !reduced.matches && hovering;
+    const energy=interactive ? Math.max(0,1-(time-lastInput)/1800) : 0;
+    let nearest=-1, best=Infinity;
+    projected.forEach((node,i) => {
+      const distance=Math.hypot(node.x-pointer.x,node.y-pointer.y);
+      node.focus=Math.exp(-(distance*distance)/(145*145))*energy;
+      if (distance<best) { best=distance;nearest=i; }
+    });
+    if (interactive && best<140 && nearest!==selected && time-lastSelection>150) explore(nearest,time);
+    edges.forEach(([a,b]) => {
+      const p=projected[a],q=projected[b];
+      const focus=Math.max(p.focus,q.focus);
+      const depth=Math.min(1.3,(p.scale+q.scale)/2);
+      // Dim far-away connections; stronger local links reveal the search neighborhood.
+      const opacity=(dark ? .12 : .09)*depth + focus*(dark ? .28 : .23);
+      line(p,q,focus>.15 ? active : base,opacity, .65+focus*.65);
+    });
+    signals=signals.filter(signal => time-signal.start<440);
+    signals.forEach(signal => {
+      const progress=(time-signal.start)/440;
+      if (progress<0 || progress>1) return;
+      const p=projected[signal.from],q=projected[signal.to];
+      const strength=Math.sin(progress*Math.PI);
+      const x=p.x+(q.x-p.x)*progress,y=p.y+(q.y-p.y)*progress;
+      line(p,q,secondary,strength*(dark?.45:.3),1.1);
+      dot(x,y,2.1,active,strength*.85);
+    });
+    // Paint distant nodes first so near nodes visually sit in front of them.
+    projected.map((node,i)=>({node,i})).sort((a,b)=>b.node.depth-a.node.depth).forEach(({node,i}) => {
+      if (node.x<-25 || node.y<-25 || node.x>width+25 || node.y>height+25) return;
+      const radius=Math.max(.8,node.scale*1.55)+node.focus*1.5;
+      const color=nodes[i].w>0 ? active : secondary;
+      if (node.focus>.25) {
+        const glow=ctx.createRadialGradient(node.x,node.y,0,node.x,node.y,18);
+        glow.addColorStop(0,rgba(color,node.focus*(dark?.2:.1)));glow.addColorStop(1,rgba(color,0));
+        ctx.fillStyle=glow;ctx.fillRect(node.x-18,node.y-18,36,36);
+      }
+      dot(node.x,node.y,radius,color,(dark?.32:.27)*Math.min(node.scale,1.4)+node.focus*.55);
+    });
+    if (interactive && selected>=0 && energy>.1) {
+      const node=projected[selected], source=nodes[selected];
+      const radius=9+node.focus*3;
+      ctx.strokeStyle=rgba(active,energy*.65);ctx.lineWidth=.8;
+      // Four small corner marks identify the sampled node, not the mouse cursor.
+      [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([x,y]) => {
+        ctx.beginPath();ctx.moveTo(node.x+x*radius,node.y+y*(radius-4));
+        ctx.lineTo(node.x+x*radius,node.y+y*radius);ctx.lineTo(node.x+x*(radius-4),node.y+y*radius);ctx.stroke();
+      });
+      const label='['+source.x.toFixed(2)+', '+source.y.toFixed(2)+', '+source.z.toFixed(2)+', '+source.w.toFixed(2)+']';
+      ctx.font='10px ui-monospace, Consolas, monospace';ctx.fillStyle=rgba(base,energy*.65);
+      const textWidth=ctx.measureText(label).width;
+      const labelX=Math.max(12,Math.min(width-textWidth-12,node.x+17));
+      const labelY=Math.max(16,Math.min(height-16,node.y-14));
+      ctx.fillText(label,labelX,labelY);
+    }
+  }
+  function tick(time) {
+    frame=null;
+    if (document.hidden) return;
+    const dt=lastFrame ? Math.min((time-lastFrame)/1000,.05) : 1/60;lastFrame=time;
+    const ease=1-Math.exp(-7*dt);
+    camera.x+=(desired.x-camera.x)*ease;camera.y+=(desired.y-camera.y)*ease;
+    render(time);
+    const moving=Math.abs(camera.x-desired.x)+Math.abs(camera.y-desired.y)>.001;
+    if (!reduced.matches && fine.matches && (moving || signals.length || (hovering && time-lastInput<1800))) frame=requestAnimationFrame(tick);
+    else lastFrame=0;
+  }
+  function schedule() { if (frame===null && !document.hidden) frame=requestAnimationFrame(tick); }
+  function resetInteraction() {
+    hovering=false;selected=-1;signals=[];lastInput=-10000;
+    desired.x=0;desired.y=0;schedule();
   }
   function resize() {
-    stop(); release();
-    const w=Math.max(1,window.innerWidth), h=Math.max(1,window.innerHeight);
-    const scale=Math.min(window.devicePixelRatio || 1,1.25,Math.sqrt(2200000/(w*h)));
-    canvas.width=Math.round(w*scale); canvas.height=Math.round(h*scale);
-    const [sw,sh]=dimensions(112), [dw,dh]=dimensions(384);
-    fields={ velocity:pair(sw,sh,true), dye:pair(dw,dh,true), pressure:pair(sw,sh,false), curl:target(sw,sh,false), divergence:target(sw,sh,false), texel:[1/sw,1/sh] };
-  }
-  function pass(name, output, textures, values={}) {
-    const shader=programs[name]; gl.useProgram(shader.program);
-    Object.entries(textures).forEach(([key,value],unit) => {
-      gl.activeTexture(gl.TEXTURE0+unit); gl.bindTexture(gl.TEXTURE_2D,value.texture);
-      gl.uniform1i(shader.uniforms[key],unit);
-    });
-    Object.entries(values).forEach(([key,value]) => {
-      const location=shader.uniforms[key];
-      if (Array.isArray(value)) {
-        if (value.length===2) gl.uniform2f(location,...value); else gl.uniform3f(location,...value);
-      } else gl.uniform1f(location,value);
-    });
-    gl.bindFramebuffer(gl.FRAMEBUFFER,output ? output.fbo : null);
-    gl.viewport(0,0,output ? output.width : canvas.width,output ? output.height : canvas.height);
-    gl.drawArrays(gl.TRIANGLES,0,3);
-  }
-  function splat(x,y,dx,dy,color,radius=0.0045) {
-    const values={ point:[x,y], aspect:canvas.width/canvas.height, radius };
-    pass('splat',fields.velocity.write,{source:fields.velocity.read},{...values,color:[dx,dy,0]}); fields.velocity.swap();
-    pass('splat',fields.dye.write,{source:fields.dye.read},{...values,color}); fields.dye.swap();
-  }
-  function colorAt(time) {
-    const t=time*0.00085;
-    return [0,2.094,4.188].map(offset => 0.012+Math.pow(0.5+0.5*Math.cos(t+offset),3)*0.8);
-  }
-  function seed() {
-    // A single broad curl introduces the interaction without an endless animation.
-    for (let i=0;i<7;i++) {
-      const a=i*0.62;
-      splat(0.38+Math.cos(a)*0.13,0.53+Math.sin(a)*0.20,-Math.sin(a)*65,Math.cos(a)*65,[0.04,0.12+i*0.035,1.0],0.009);
-    }
-    seeded=true; lastInput=performance.now(); schedule();
-  }
-  function step(dt) {
-    const f=fields, texel=f.texel;
-    pass('curl',f.curl,{velocity:f.velocity.read},{texel});
-    pass('vorticity',f.velocity.write,{velocity:f.velocity.read,curls:f.curl},{texel,dt}); f.velocity.swap();
-    pass('divergence',f.divergence,{velocity:f.velocity.read},{texel});
-    pass('fade',f.pressure.write,{source:f.pressure.read}); f.pressure.swap();
-    for (let i=0;i<18;i++) { pass('pressure',f.pressure.write,{pressure:f.pressure.read,divergence:f.divergence},{texel}); f.pressure.swap(); }
-    pass('project',f.velocity.write,{velocity:f.velocity.read,pressure:f.pressure.read},{texel}); f.velocity.swap();
-    pass('advect',f.velocity.write,{velocity:f.velocity.read,source:f.velocity.read},{texel,dt,decay:0.8}); f.velocity.swap();
-    pass('advect',f.dye.write,{velocity:f.velocity.read,source:f.dye.read},{texel,dt,decay:1.0}); f.dye.swap();
-  }
-  function draw(time) {
-    if (!enabled || lost || document.hidden || !fields) { stop(); return; }
-    const dt=lastFrame ? Math.min((time-lastFrame)/1000,1/30) : 1/60; lastFrame=time;
-    if (pending) {
-      const p=pending; pending=null;
-      splat(p.x,p.y,p.dx,p.dy,colorAt(time),0.0035+Math.min(Math.hypot(p.dx,p.dy)/80000,0.005));
-    }
-    step(dt);
-    const idle=(time-lastInput)/1000;
-    pass('display',null,{dye:fields.dye.read},{texel:[1/fields.dye.read.width,1/fields.dye.read.height],dark:root.dataset.theme==='dark'?1:0,fadeOut:Math.min(1,Math.max(0,8-idle))});
-    if (idle<8) frame=requestAnimationFrame(draw); else stop();
-  }
-  function schedule() { if (frame===null && enabled && !document.hidden) frame=requestAnimationFrame(draw); }
-  function stop() {
-    if (frame!==null) cancelAnimationFrame(frame);
-    frame=null; lastFrame=0; previous=null; pending=null;
-    if (gl && !lost) {
-      targets.forEach(target => { gl.bindFramebuffer(gl.FRAMEBUFFER,target.fbo); gl.clear(gl.COLOR_BUFFER_BIT); });
-      gl.bindFramebuffer(gl.FRAMEBUFFER,null); gl.clear(gl.COLOR_BUFFER_BIT);
-    }
+    width=Math.max(1,window.innerWidth);height=Math.max(1,window.innerHeight);
+    const scale=Math.min(window.devicePixelRatio||1,1.5,Math.sqrt(2400000/(width*height)));
+    canvas.width=Math.round(width*scale);canvas.height=Math.round(height*scale);
+    ctx.setTransform(scale,0,0,scale,0,0);
+    canvas.hidden=false;resetInteraction();
   }
   function capability() {
-    enabled=fine.matches && !reduced.matches && !lost;
-    canvas.hidden=!enabled;
-    if (!enabled) { stop(); if (gl && !lost) release(); return; }
-    try { resize(); if (!seeded) seed(); }
-    catch (_) { enabled=false; canvas.hidden=true; stop(); release(); }
+    if (frame!==null) cancelAnimationFrame(frame);
+    frame=null;lastFrame=0;camera.x=0;camera.y=0;resetInteraction();
   }
-  try { if (!initialize()) return; } catch (_) { canvas.hidden=true; return; }
   document.addEventListener('pointermove',event => {
-    if (!enabled || document.hidden || event.pointerType==='touch' || !fields) return;
-    if (event.target instanceof Element && event.target.closest('.robot-companion, input, textarea, select, [contenteditable="true"]')) { previous=null; return; }
-    const now=performance.now(), x=event.clientX/window.innerWidth, y=1-event.clientY/window.innerHeight;
-    const origin=previous && now-previous.time<150 ? previous : {x,y};
-    const clamp=value=>Math.max(-400,Math.min(400,value));
-    const dx=clamp((x-origin.x)*2800), dy=clamp((y-origin.y)*2800);
-    previous={x,y,time:now}; lastInput=now;
-    if (Math.hypot(dx,dy)>0.5) {
-      pending={x,y,dx:clamp(dx+(pending ? pending.dx : 0)),dy:clamp(dy+(pending ? pending.dy : 0))}; schedule();
-    }
+    if (reduced.matches || !fine.matches || event.pointerType==='touch' || document.hidden) return;
+    if (event.target instanceof Element && event.target.closest('.robot-companion, input, textarea, select, [contenteditable="true"]')) {resetInteraction();return;}
+    pointer.x=event.clientX;pointer.y=event.clientY;
+    desired.x=Math.max(-1,Math.min(1,(pointer.x/width-.5)*2));
+    desired.y=Math.max(-1,Math.min(1,(pointer.y/height-.5)*2));
+    lastInput=performance.now();hovering=true;schedule();
   },{passive:true});
-  document.addEventListener('pointerout',event=>{if(!event.relatedTarget) previous=null;},{passive:true});
-  document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
-  window.addEventListener('blur',stop);
-  window.addEventListener('scroll',()=>{previous=null;},{passive:true});
-  window.addEventListener('resize',()=>{if(fine.matches && !reduced.matches && !lost)capability();},{passive:true});
-  fine.addEventListener('change',capability); reduced.addEventListener('change',capability);
-  canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();lost=true;enabled=false;canvas.hidden=true;stop();targets=[];fields=null;});
-  canvas.addEventListener('webglcontextrestored',()=>{
-    lost=false; programs={}; seeded=false;
-    try { if(initialize())capability(); } catch (_) { enabled=false;canvas.hidden=true; }
+  document.addEventListener('pointerout',event=>{if(!event.relatedTarget)resetInteraction();},{passive:true});
+  document.addEventListener('keydown',event=>{if(event.key==='Tab')resetInteraction();});
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){if(frame!==null)cancelAnimationFrame(frame);frame=null;lastFrame=0;hovering=false;signals=[];}
+    else resetInteraction();
   });
-  capability();
+  window.addEventListener('blur',resetInteraction);
+  window.addEventListener('resize',resize,{passive:true});
+  window.addEventListener('scroll',resetInteraction,{passive:true});
+  fine.addEventListener('change',capability);reduced.addEventListener('change',capability);
+  // A theme change also repaints an idle network; it doesn't restart continuous motion.
+  new MutationObserver(schedule).observe(root,{attributes:true,attributeFilter:['data-theme']});
+  resize();
 })();

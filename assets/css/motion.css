@@ -1,9 +1,6 @@
-/* A transparent fluid field beneath the content, with the native cursor. */
+/* A decorative model-space visualization beneath the page content. */
 body { isolation: isolate; }
 #main { position: relative; z-index: 1; }
 .page__footer { z-index: 1; }
-.cursor-paint { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
-  .cursor-paint { display: none !important; }
-}
-@media print { .cursor-paint { display: none !important; } }
+.model-space { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+@media print { .model-space { display: none !important; } }
