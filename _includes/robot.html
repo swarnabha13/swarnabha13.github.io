@@ -1,28 +1,60 @@
-<aside class="robot-companion" id="robot-companion" aria-label="Robot companion" hidden>
+<aside class="robot-companion" id="robot-companion" aria-label="R0 robot companion" data-expression="neutral" data-action="idle" hidden>
   <section class="robot-panel" id="robot-panel" aria-labelledby="robot-title" hidden>
-    <header><h2 id="robot-title">Meet R0</h2><button class="robot-close" type="button" aria-label="Close robot controls">×</button></header>
-    <p class="robot-status" role="status" aria-live="polite">A little robot with a lot of curiosity. Want to play?</p>
-    <div class="robot-actions"><button type="button" data-robot-action="wave">Wave 👋</button><button type="button" data-robot-action="dance">Dance ♫</button><button type="button" data-robot-action="play" aria-expanded="false" aria-controls="robot-game">Play ★</button></div>
+    <header><div><span class="robot-panel-kicker">YOUR LITTLE EXPLORER</span><h2 id="robot-title">Hey, I’m R0.</h2></div><button class="robot-close" type="button" aria-label="Close robot controls">×</button></header>
+    <p class="robot-status" role="status" aria-live="polite">I’m curious about everything. Especially you.</p>
+    <div class="robot-actions"><button type="button" data-robot-action="wave">Wave <span aria-hidden="true">↗</span></button><button type="button" data-robot-action="dance">Dance <span aria-hidden="true">♫</span></button><button type="button" data-robot-action="explore">Explore <span aria-hidden="true">✧</span></button><button type="button" data-robot-action="play" aria-expanded="false" aria-controls="robot-game">Play <span aria-hidden="true">★</span></button></div>
     <div class="robot-game" id="robot-game" hidden>
       <div class="robot-game-top"><span id="robot-score">Stars: 0 / 5</span><button class="robot-reset" type="button">Restart</button></div>
       <div class="robot-arena" tabindex="0" role="group" aria-label="Robot playground" aria-describedby="robot-instructions"><span class="arena-bot" aria-hidden="true">••</span><span class="arena-target" aria-hidden="true">★</span></div>
       <p id="robot-instructions">Collect 5 stars! Tap or click to move. With the playground focused, use the arrow keys.</p>
     </div>
-    <p class="robot-footnote">Your tiny playground. No account needed.</p>
+    <p class="robot-footnote">I’ll head straight home when you return to the page.</p>
   </section>
-  <button class="robot-launcher" type="button" aria-label="Play with R0 the robot" aria-expanded="false" aria-controls="robot-panel">
-    <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-      <ellipse cx="50" cy="92" rx="27" ry="4" fill="#dddfee"/>
-      <g class="bot-body" stroke="#353950" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M50 20V12"/><circle cx="50" cy="9" r="4" fill="#8c80ff"/>
-        <rect x="23" y="22" width="54" height="40" rx="13" fill="#eeedff"/>
-        <rect x="29" y="30" width="42" height="23" rx="8" fill="#252940"/>
-        <g class="bot-eyes" fill="#9df0e0" stroke="none"><rect x="37" y="37" width="6" height="9" rx="3"/><rect x="57" y="37" width="6" height="9" rx="3"/></g>
-        <rect x="34" y="64" width="32" height="19" rx="7" fill="#aca1fc"/>
-        <path d="M40 84v6m20-6v6"/><path d="M31 67l-8 9"/>
-        <path class="bot-arm-right" d="M69 67l8 9"/>
-        <circle cx="50" cy="73" r="3" fill="#9df0e0" stroke="none"/>
+  <span class="robot-bubble" aria-hidden="true">Hello, human.</span>
+  <button class="robot-launcher" type="button" aria-label="Meet R0: robot gestures and games" aria-expanded="false" aria-controls="robot-panel">
+    <svg class="r0-figure" viewBox="0 0 220 260" width="220" height="260" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="r0-shell" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff"/><stop offset=".38" stop-color="#d8dce6"/><stop offset=".7" stop-color="#a5aebf"/><stop offset="1" stop-color="#6b758b"/></linearGradient>
+        <linearGradient id="r0-side" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#8d98ae"/><stop offset="1" stop-color="#343f56"/></linearGradient>
+        <linearGradient id="r0-rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6cf0dc"/><stop offset=".3" stop-color="#8ab9ff"/><stop offset=".58" stop-color="#a18bff"/><stop offset=".8" stop-color="#df94dc"/><stop offset="1" stop-color="#ffc68d"/></linearGradient>
+        <linearGradient id="r0-glass" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#283347"/><stop offset=".5" stop-color="#0c1425"/><stop offset="1" stop-color="#18233b"/></linearGradient>
+        <linearGradient id="r0-shine" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".27"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        <radialGradient id="r0-floor"><stop stop-color="#707998" stop-opacity=".35"/><stop offset="1" stop-color="#707998" stop-opacity="0"/></radialGradient>
+      </defs>
+      <ellipse class="r0-shadow" cx="113" cy="245" rx="75" ry="12" fill="url(#r0-floor)"/>
+      <g class="r0-character" stroke-linejoin="round" stroke-linecap="round">
+        <g class="r0-leg-l"><rect x="82" y="207" width="19" height="24" rx="7" fill="#465169"/><path d="M81 221h22l3 17-10 5H74v-11z" fill="url(#r0-shell)" stroke="#778398" stroke-width="1.2"/><path d="M75 239h25" stroke="#3e4960" stroke-width="3"/></g>
+        <g class="r0-leg-r"><rect x="121" y="207" width="19" height="24" rx="7" fill="#465169"/><path d="M120 221h23l7 17-7 5h-27v-13z" fill="url(#r0-shell)" stroke="#778398" stroke-width="1.2"/><path d="M118 239h26" stroke="#3e4960" stroke-width="3"/></g>
+        <g class="r0-arm-l"><circle cx="76" cy="157" r="14" fill="#414d65"/><circle cx="75" cy="157" r="9" fill="url(#r0-shell)"/><path d="M67 164l12 7-12 31-14-6z" fill="url(#r0-shell)" stroke="#79869d" stroke-width="1.2"/><circle cx="60" cy="201" r="8" fill="#414d65"/><path d="M53 200l-5 13m11-10-1 13m8-11 2 9" fill="none" stroke="#b1bbcd" stroke-width="5"/></g>
+        <rect x="100" y="127" width="25" height="23" rx="9" fill="#35415a"/>
+        <path d="M84 142q28-12 57 0l5 51q-2 20-31 21-32 0-35-19z" fill="url(#r0-shell)" stroke="#7f8ba2" stroke-width="1.2"/>
+        <path d="M137 146l4 45q0 14-12 17" fill="none" stroke="#56627a" stroke-width="5" opacity=".55"/>
+        <rect x="95" y="166" width="32" height="26" rx="9" fill="#39465f"/><path d="M104 177h5v7m7-10v10" fill="none" stroke="#97a7c5" stroke-width="2"/>
+        <circle class="r0-core" cx="111" cy="155" r="3" fill="#84f4df"/><circle cx="102" cy="155" r="2" fill="#a994ff"/><circle cx="120" cy="155" r="2" fill="#ffc6a2"/>
+        <g class="r0-head">
+          <path d="M140 28l26 10q16 5 17 25v54q-2 18-23 21l-23-9z" fill="url(#r0-side)" stroke="#657187" stroke-width="1.5"/>
+          <path d="M159 46l10 7m-9 3 10 7m-9 3 10 7" stroke="#202c44" stroke-width="3"/>
+          <rect x="47" y="25" width="117" height="112" rx="27" fill="url(#r0-shell)" stroke="#b1bccf" stroke-width="1.5"/>
+          <path d="M67 29q40-9 73 2" stroke="#ffffff" opacity=".65" stroke-width="2" fill="none"/>
+          <rect x="54" y="33" width="103" height="96" rx="22" fill="url(#r0-rim)"/>
+          <rect x="61" y="40" width="89" height="82" rx="17" fill="url(#r0-glass)" stroke="#404e67" stroke-width="2"/>
+          <path d="M73 44h58q13 0 14 15v9L64 90V61q0-15 9-17" fill="url(#r0-shine)"/>
+          <circle cx="172" cy="98" r="11" fill="#38465d" stroke="#a9b4c7" stroke-width="2"/><circle cx="172" cy="98" r="5" fill="#8c99b0"/>
+          <g class="r0-face" fill="none" stroke="#b4fff0" stroke-width="4.5">
+            <g class="bot-eyes r0-eyes">
+              <g class="r0-expression r0-expression-neutral"><rect x="81" y="72" width="9" height="17" rx="4.5" fill="#b4fff0" stroke="none"/><rect x="120" y="72" width="9" height="17" rx="4.5" fill="#b4fff0" stroke="none"/><path d="M99 99q7 5 13 0" stroke-width="2.5"/></g>
+              <g class="r0-expression r0-expression-happy"><path d="M79 82q7-12 14 0m24 0q7-12 14 0"/><path d="M98 96q8 13 17 0" stroke-width="3"/></g>
+              <g class="r0-expression r0-expression-curious"><rect x="81" y="75" width="9" height="14" rx="4" fill="#b4fff0" stroke="none"/><rect x="120" y="69" width="9" height="20" rx="4" fill="#b4fff0" stroke="none"/><path d="M118 60l13 2m-31 38h11" stroke-width="2.5"/></g>
+              <g class="r0-expression r0-expression-surprised"><ellipse cx="86" cy="79" rx="6" ry="10"/><ellipse cx="125" cy="79" rx="6" ry="10"/><ellipse cx="106" cy="102" rx="4" ry="5" stroke-width="3"/></g>
+              <g class="r0-expression r0-expression-sleepy"><path d="M79 83h14m24 0h14" stroke-width="3"/><path d="M103 100h6" stroke-width="2"/></g>
+              <g class="r0-expression r0-expression-focused"><path d="M79 74l14 5m24 0 14-5" stroke-width="2.5"/><path d="M83 85h7m31 0h7"/><path d="M101 100h11" stroke-width="2"/></g>
+            </g>
+          </g>
+        </g>
+        <g class="r0-arm-r"><circle cx="148" cy="157" r="14" fill="#414d65"/><circle cx="150" cy="157" r="9" fill="url(#r0-shell)"/><path d="M149 168l13-6 15 33-16 7z" fill="url(#r0-shell)" stroke="#79869d" stroke-width="1.2"/><circle cx="169" cy="202" r="8" fill="#414d65"/><path d="M163 206l-1 10m8-10 2 12m3-16 7 10" fill="none" stroke="#b1bbcd" stroke-width="5"/></g>
       </g>
-    </svg><span>Play with R0</span>
+      <g class="r0-sleep-marks" fill="#aaa0ed" font-family="ui-monospace,monospace" font-weight="600"><text x="171" y="51" font-size="14">z</text><text x="187" y="32" font-size="19">z</text></g>
+    </svg>
+    <span class="robot-nameplate"><span class="robot-ready-dot" aria-hidden="true"></span> R0 <span aria-hidden="true">·</span> Say hello</span>
   </button>
 </aside>

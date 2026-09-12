@@ -1,0 +1,75 @@
+/* R0's sculpted shell is SVG; each limb and expression can move independently. */
+.robot-companion { width: 148px; right: 16px; bottom: 12px; pointer-events: none; }
+.robot-companion .robot-launcher { display: block; width: 148px; padding: 0; border: 0 !important; background: transparent !important; box-shadow: none; border-radius: 18px; pointer-events: auto; color: var(--ink); translate: var(--travel-x, 0px) var(--travel-y, 0px); transition: none; }
+.robot-companion .robot-launcher svg { display: block; width: 148px; height: 175px; overflow: visible; }
+.robot-companion .robot-launcher > .robot-nameplate { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 5px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 30px; font-size: 10px; font-weight: 600; box-shadow: 0 3px 12px #1118270d; }
+.robot-ready-dot { width: 5px; height: 5px; border-radius: 50%; background: #34ab8a; }
+.robot-companion .robot-panel { position: absolute; right: 0; bottom: calc(100% + 10px); width: 310px; max-height: calc(100dvh - 240px); margin: 0; pointer-events: auto; }
+.robot-panel-kicker { display: block; font: 9px/1.4 ui-monospace, monospace; letter-spacing: 1.4px; color: var(--muted); margin-bottom: 5px; }
+.robot-companion .robot-actions { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+.robot-actions button { display: flex; justify-content: space-between; align-items: center; min-height: 40px; }
+.robot-actions button:hover { border-color: var(--accent); }
+.robot-companion .robot-status { min-height: 36px; }
+.robot-bubble { position: absolute; right: 15px; bottom: calc(100% + 2px); max-width: 210px; width: max-content; padding: 9px 13px; border: 1px solid var(--line); border-radius: 12px 12px 2px 12px; background: var(--surface); box-shadow: 0 8px 25px #17203912; color: var(--muted); font-size: 11px; opacity: 0; transition: opacity .18s; }
+.robot-companion.is-speaking .robot-bubble { opacity: 1; }
+.robot-companion.is-panel-open .robot-bubble { display: none; }
+.robot-companion.is-roaming .robot-launcher { pointer-events: none; }
+.robot-companion.is-roaming .robot-nameplate,
+.robot-companion.is-roaming .robot-bubble { visibility: hidden; }
+.r0-character { transform-origin: 110px 231px; animation: r0-breathe 4s ease-in-out infinite; }
+.r0-head { transform-origin: 111px 135px; transform: translate(var(--gaze-x,0px),var(--gaze-y,0px)) rotate(var(--head-tilt,0deg)); transition: transform .25s ease-out; }
+.r0-eyes { transform-origin: 106px 82px; transform: translate(var(--eye-x,0px),var(--eye-y,0px)); }
+.robot-companion.is-blinking .r0-eyes { transform: translate(var(--eye-x,0px),var(--eye-y,0px)) scaleY(.08); }
+.r0-arm-l { transform-origin: 76px 157px; }
+.r0-arm-r { transform-origin: 148px 157px; }
+.r0-leg-l { transform-origin: 93px 208px; }
+.r0-leg-r { transform-origin: 131px 208px; }
+.r0-expression, .r0-sleep-marks { display: none; }
+[data-expression="neutral"] .r0-expression-neutral,
+[data-expression="happy"] .r0-expression-happy,
+[data-expression="curious"] .r0-expression-curious,
+[data-expression="surprised"] .r0-expression-surprised,
+[data-expression="sleepy"] .r0-expression-sleepy,
+[data-expression="focused"] .r0-expression-focused,
+[data-expression="sleepy"] .r0-sleep-marks { display: inline; }
+[data-action="wave"] .r0-arm-r { animation: r0-wave 2.3s ease-in-out both; }
+[data-action="wave"] .r0-head { --head-tilt: -5deg; }
+[data-action="dance"] .r0-character { animation: r0-dance .55s ease-in-out 6; }
+[data-action="dance"] .r0-arm-l { animation: r0-groove-left .55s ease-in-out 6; }
+[data-action="dance"] .r0-arm-r { animation: r0-groove-right .55s ease-in-out 6; }
+[data-action="dance"] .r0-head { --head-tilt: 8deg; }
+[data-action="curious"] .r0-head { --head-tilt: -12deg; }
+[data-action="stretch"] .r0-arm-l { animation: r0-stretch-l 2.4s ease-in-out; }
+[data-action="stretch"] .r0-arm-r { animation: r0-stretch-r 2.4s ease-in-out; }
+[data-action="sleep"] .r0-head { --head-tilt: 9deg; --gaze-y: 4px; }
+[data-action="scroll-down"] .r0-character { transform: rotate(-6deg) translateY(-2px); animation: none; }
+[data-action="scroll-down"] .r0-head { --head-tilt: 7deg; --gaze-y: 3px; }
+[data-action="scroll-up"] .r0-character { transform: rotate(6deg); animation: none; }
+[data-action="scroll-up"] .r0-head { --head-tilt: -7deg; --gaze-y: -3px; }
+[data-action="explore"] .r0-character { animation: r0-fly .55s ease-in-out infinite alternate; }
+[data-action="explore"] .r0-arm-l { transform: rotate(55deg); }
+[data-action="explore"] .r0-arm-r { transform: rotate(-55deg); }
+[data-action="explore"] .r0-shadow { opacity: 0; }
+[data-action="explore"] .r0-leg-l { transform: rotate(12deg); }
+[data-action="explore"] .r0-leg-r { transform: rotate(-12deg); }
+@keyframes r0-breathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+@keyframes r0-wave { 0%,100% { transform: rotate(0); } 20%,48%,76% { transform: rotate(-95deg); } 34%,62%,86% { transform: rotate(-120deg); } }
+@keyframes r0-dance { 0%,100% { transform: rotate(-7deg); } 50% { transform: translateY(-7px) rotate(7deg); } }
+@keyframes r0-groove-left { 0%,100% { transform: rotate(45deg); } 50% { transform: rotate(-10deg); } }
+@keyframes r0-groove-right { 0%,100% { transform: rotate(10deg); } 50% { transform: rotate(-45deg); } }
+@keyframes r0-stretch-l { 0%,100% { transform: rotate(0); } 35%,70% { transform: rotate(135deg); } }
+@keyframes r0-stretch-r { 0%,100% { transform: rotate(0); } 35%,70% { transform: rotate(-135deg); } }
+@keyframes r0-fly { from { transform: rotate(-10deg) translateY(-2px); } to { transform: rotate(-4deg) translateY(-7px); } }
+.robot-companion.is-paused *, .robot-companion.is-paused { animation-play-state: paused !important; }
+@media (max-width: 700px) {
+  .robot-companion { width: 98px; right: 8px; bottom: 8px; }
+  .robot-companion .robot-launcher { width: 98px; }
+  .robot-companion .robot-launcher svg { width: 98px; height: 116px; }
+  .robot-companion .robot-launcher > .robot-nameplate { font-size: 9px; padding: 4px 8px; gap: 4px; }
+  .robot-companion .robot-panel { max-height: calc(100dvh - 170px); }
+  .robot-bubble { right: 3px; max-width: 175px; font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .robot-companion *, .robot-companion { animation: none !important; transition: none !important; }
+  .r0-head, .r0-character, .r0-arm-l, .r0-arm-r, .r0-leg-l, .r0-leg-r { transform: none !important; }
+}
