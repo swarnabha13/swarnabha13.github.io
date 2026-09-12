@@ -268,7 +268,7 @@ html[data-theme="dark"] {
 }
 :root :is(.focus-card, .archive .list__item, .archive .grid__item,
   .work-row, .journey-row, .photo-gallery__item, .contact-section,
-  .hero-portrait figcaption, .archive--cards > ul > li) {
+  .hero-portrait figcaption, .archive--cards > ul > li, .sidebar .author__urls) {
   /* Static grain sits behind content; photographs and text stay crisp. */
   background: var(--glass-grain) 0 0 / 180px 180px repeat,
     var(--glass-sheen), var(--glass-background);
@@ -296,6 +296,39 @@ html[data-theme="dark"] {
 .contact-section h2, .contact-aside a { color: var(--ink); }
 .contact-section .eyebrow, .contact-aside > span, .portrait-mark { color: var(--accent); }
 .contact-aside { border-color: var(--glass-border); }
+/* A readable contact panel in both themes, including the mobile dropdown. */
+.sidebar .author__name { color: var(--ink); }
+.sidebar .author__urls {
+  width: min(250px, calc(100vw - 44px));
+  padding: 10px;
+  border-radius: 14px;
+  color: var(--ink);
+  z-index: 1;
+}
+.sidebar .author__urls::before, .sidebar .author__urls::after { display: none; }
+.sidebar .author__urls li { white-space: normal; }
+.sidebar .author__urls a, .sidebar .author__meta {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.sidebar .author__urls a, .sidebar .author__urls a:visited { color: var(--ink); border-radius: 8px; }
+.sidebar .author__urls a:hover, .sidebar .author__urls a:focus-visible {
+  background: var(--glass-highlight);
+  color: var(--accent);
+  text-decoration: none;
+}
+.sidebar .author__meta { color: var(--muted); font-size: 12px; }
+.sidebar .author__urls i { flex: 0 0 17px; width: 17px; margin: 0; text-align: center; color: var(--accent); }
+.sidebar .author__urls-wrapper .btn { background: var(--glass-background); color: var(--ink); border: 1px solid var(--glass-border); border-radius: 8px; }
+@media (min-width: 1200px) {
+  .sidebar .author__urls { width: 100%; margin-top: 16px; }
+}
 @media (max-width: 700px) {
   .work-row, .journey-row, .archive--cards > ul > li { padding: 18px; }
 }
