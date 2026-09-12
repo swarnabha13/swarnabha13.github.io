@@ -326,8 +326,35 @@ html[data-theme="dark"] {
 .sidebar .author__meta { color: var(--muted); font-size: 12px; }
 .sidebar .author__urls i { flex: 0 0 17px; width: 17px; margin: 0; text-align: center; color: var(--accent); }
 .sidebar .author__urls-wrapper .btn { background: var(--glass-background); color: var(--ink); border: 1px solid var(--glass-border); border-radius: 8px; }
-@media (min-width: 1200px) {
+@media (min-width: 57.8125em) {
   .sidebar .author__urls { width: 100%; margin-top: 16px; }
+}
+/* Match the theme's 925px sidebar breakpoint. Expanded mobile links belong
+   in the document flow, so their height pushes the page content down. */
+@media (max-width: 57.81249em) {
+  .sidebar { width: 100%; float: none; margin-bottom: 28px; }
+  .sidebar .author-profile {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1fr);
+    align-items: start;
+    gap: 16px;
+  }
+  .author-profile > .author__avatar { display: block; width: 80px; height: auto; }
+  .author-profile > .author__content { display: block; min-width: 0; padding: 0; }
+  .author-profile > .author__urls-wrapper {
+    grid-column: 1 / -1;
+    display: block;
+    position: static;
+    width: 100%;
+    min-width: 0;
+    z-index: auto;
+  }
+  .sidebar .author__urls {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    margin: 12px 0 0;
+  }
 }
 @media (max-width: 700px) {
   .work-row, .journey-row, .archive--cards > ul > li { padding: 18px; }
