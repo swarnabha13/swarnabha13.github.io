@@ -7,10 +7,10 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Swarnabha's Webpage"
+title                    : "Swarnabha Roy"
 title_separator          : "-"
 name                     : &name "Swarnabha Roy"
-description              : &description "personal description"
+description              : &description "Swarnabha Roy — RL Engineer / AI Researcher at HammerheadAI. Research in reinforcement learning, multi-robot autonomy, and edge-cloud robotics."
 url                      : https://swarnabharoy.com # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "swarnabha13/swarnabha13.github.io"
@@ -82,9 +82,9 @@ analytics:
 author:
   name             : "Swarnabha Roy"
   avatar           : "DP2_N.jpg"
-  bio              : "Doctoral Student in Computer Engineering at Texas A&M University"
+  bio              : "RL Engineer / AI Researcher at HammerheadAI"
   location         : "College Station, Texas, USA"
-  employer         : #"Texas A&M University"
+  employer         : "HammerheadAI"
   pubmed           : #"https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
   googlescholar    : "https://scholar.google.com/citations?user=B9MMJM0AAAAJ"
   email            :  "swarnabha7@tamu.edu"

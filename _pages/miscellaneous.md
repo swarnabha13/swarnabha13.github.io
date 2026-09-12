@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "Miscellaneous"
+title: "Beyond work & photography"
 permalink: /miscellaneous/
 author_profile: true
 ---
@@ -28,8 +28,10 @@ Hiking is my way of connecting with the natural world. Trails unfold like chapte
 
 In essence, my life outside work is a canvas painted with many passions — from the rhythm of a guitar to the stillness of a mountain view. Here, I present to you a collection of cherished moments frozen in time, snapshots I've had the privilege to capture:
 
-![Illustration of combining vision and language modalities](/images/1.jpg){:  width="300px"}    ![Illustration of combining vision and language modalities](/images/3.jpg){: width="300px"}    ![Illustration of combining vision and language modalities](/images/5.jpg){:  width="300px"}
-
-![Illustration of combining vision and language modalities](/images/4.jpg){:  width="300px"}    ![Illustration of combining vision and language modalities](/images/6.jpg){:  width="300px"}    ![Illustration of combining vision and language modalities](/images/2.jpg){:  width="300px"}
+<section id="photography" aria-labelledby="sunset-gallery-title">
+  <h2 id="sunset-gallery-title">Chasing sunsets</h2>
+  <p>Photographs by Swarnabha Roy. Select a photograph to see the full-size original.</p>
+  {% include photo-gallery.html %}
+</section>
 
 These images tell tales of my escapades, my connection with art and nature, and the ever-evolving tapestry of my passions.

@@ -12,6 +12,7 @@ layout: compress
   </head>
 
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
 
     {% include browser-upgrade.html %}
     {% include masthead.html %}
@@ -25,7 +26,9 @@ layout: compress
       </footer>
     </div>
 
+    {% include robot.html %}
     {% include scripts.html %}
+    <script src="{{ base_path }}/assets/js/robot.js" defer></script>
 
   </body>
 </html>

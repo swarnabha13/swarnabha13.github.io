@@ -1,0 +1,10 @@
+<div class="photo-gallery">
+  {% for photo in site.data.photographs %}
+  <figure class="photo-gallery__item">
+    <a href="{{ site.baseurl }}/images/{{ photo.image }}" aria-label="View full-size photograph: {{ photo.title | escape }}">
+      <img src="{{ site.baseurl }}/images/{{ photo.image }}" alt="{{ photo.alt | escape }}" width="{{ photo.width }}" height="{{ photo.height }}" loading="lazy" decoding="async">
+    </a>
+    <figcaption>{{ photo.title }} <span aria-hidden="true">↗</span></figcaption>
+  </figure>
+  {% endfor %}
+</div>

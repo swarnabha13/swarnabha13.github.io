@@ -1,0 +1,30 @@
+- image: 2.jpg
+  title: "Sunset by the sea"
+  alt: "An orange sun above ocean waves, with a parasail and a boat silhouetted against the sky."
+  width: 4000
+  height: 2252
+- image: 3.jpg
+  title: "A sky in pink and violet"
+  alt: "Pink and violet sunset clouds above a dark silhouette of trees and rooftops."
+  width: 1600
+  height: 804
+- image: 5.jpg
+  title: "Evening over campus"
+  alt: "Glowing orange clouds above the Texas A&M water tower and campus at sunset."
+  width: 4000
+  height: 2252
+- image: 4.jpg
+  title: "Lighthouse at dusk"
+  alt: "A red and white lighthouse and palm trees beside the sea under a purple evening sky."
+  width: 4000
+  height: 2252
+- image: 6.jpg
+  title: "Reflections at twilight"
+  alt: "An orange and blue twilight sky reflected in still water."
+  width: 4000
+  height: 2000
+- image: 1.jpg
+  title: "Light through the clouds"
+  alt: "Golden light breaking through dark clouds over a mountain ridge and the valley below."
+  width: 4000
+  height: 2256

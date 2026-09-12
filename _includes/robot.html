@@ -1,0 +1,28 @@
+<aside class="robot-companion" id="robot-companion" aria-label="Robot companion" hidden>
+  <section class="robot-panel" id="robot-panel" aria-labelledby="robot-title" hidden>
+    <header><h2 id="robot-title">Meet R0</h2><button class="robot-close" type="button" aria-label="Close robot controls">×</button></header>
+    <p class="robot-status" role="status" aria-live="polite">A little robot with a lot of curiosity. Want to play?</p>
+    <div class="robot-actions"><button type="button" data-robot-action="wave">Wave 👋</button><button type="button" data-robot-action="dance">Dance ♫</button><button type="button" data-robot-action="play" aria-expanded="false" aria-controls="robot-game">Play ★</button></div>
+    <div class="robot-game" id="robot-game" hidden>
+      <div class="robot-game-top"><span id="robot-score">Stars: 0 / 5</span><button class="robot-reset" type="button">Restart</button></div>
+      <div class="robot-arena" tabindex="0" role="group" aria-label="Robot playground" aria-describedby="robot-instructions"><span class="arena-bot" aria-hidden="true">••</span><span class="arena-target" aria-hidden="true">★</span></div>
+      <p id="robot-instructions">Collect 5 stars! Tap or click to move. With the playground focused, use the arrow keys.</p>
+    </div>
+    <p class="robot-footnote">Your tiny playground. No account needed.</p>
+  </section>
+  <button class="robot-launcher" type="button" aria-label="Play with R0 the robot" aria-expanded="false" aria-controls="robot-panel">
+    <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+      <ellipse cx="50" cy="92" rx="27" ry="4" fill="#dddfee"/>
+      <g class="bot-body" stroke="#353950" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M50 20V12"/><circle cx="50" cy="9" r="4" fill="#8c80ff"/>
+        <rect x="23" y="22" width="54" height="40" rx="13" fill="#eeedff"/>
+        <rect x="29" y="30" width="42" height="23" rx="8" fill="#252940"/>
+        <g class="bot-eyes" fill="#9df0e0" stroke="none"><rect x="37" y="37" width="6" height="9" rx="3"/><rect x="57" y="37" width="6" height="9" rx="3"/></g>
+        <rect x="34" y="64" width="32" height="19" rx="7" fill="#aca1fc"/>
+        <path d="M40 84v6m20-6v6"/><path d="M31 67l-8 9"/>
+        <path class="bot-arm-right" d="M69 67l8 9"/>
+        <circle cx="50" cy="73" r="3" fill="#9df0e0" stroke="none"/>
+      </g>
+    </svg><span>Play with R0</span>
+  </button>
+</aside>

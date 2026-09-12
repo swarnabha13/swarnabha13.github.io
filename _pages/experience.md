@@ -7,6 +7,15 @@ author_profile: true
 
 {% include base_path %}
 
+* **HammerheadAI**
+  * RL Engineer / AI Researcher
+  * Current role
+
+* **Mitsubishi Electric Research Laboratories (MERL)**
+  * Research Intern, Summer 2025
+  * Supervised by [Dr. Jianlin Guo](https://www.merl.com/people/guo)
+  * Research on UAV path planning for mobile IoT networks.
+
 * **Texas A&M University, College Station, TX, USA**
   * Graduate Teaching Assistant 
   * ECEN 403/ECEN 404: Capstone Senior Design Lab
