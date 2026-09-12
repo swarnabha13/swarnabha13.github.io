@@ -3,6 +3,7 @@ layout: archive
 title: "Involvements"
 permalink: /involvements/
 author_profile: true
+content_cards: true
 ---
 
 {% include base_path %}
